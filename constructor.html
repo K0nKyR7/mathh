@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Конструктор вариантов ОГЭ — Максим Ковалёв</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #eef2f7 100%);
+            color: #1a1a2e;
+            line-height: 1.5;
+        }
+        .navbar {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #4a5568;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover { color: #667eea; }
+        .tasks-btn, .constructor-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white !important;
+            padding: 8px 20px;
+            border-radius: 30px;
+        }
+        .constructor-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+            margin-bottom: 40px;
+            border-radius: 0 0 40px 40px;
+        }
+        .constructor-hero h1 { font-size: 2.5rem; margin-bottom: 16px; }
+        .constructor-hero p { font-size: 1.1rem; opacity: 0.9; }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+        .back-link:hover { opacity: 1; }
+
+        .selection-panel {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        .selection-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .selection-title {
+            font-weight: 700;
+            color: #1a1a2e;
+            font-size: 1.1rem;
+        }
+        .select-all-btn {
+            padding: 6px 16px;
+            background: #e2e8f0;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+        .select-all-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        .numbers-group {
+            margin-bottom: 20px;
+        }
+        .group-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 10px;
+            padding-left: 4px;
+        }
+        .numbers-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .number-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: #f8f9fc;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid #e2e8f0;
+        }
+        .number-checkbox:hover {
+            background: #e8f0fe;
+            border-color: #667eea;
+        }
+        .number-checkbox input {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+        .number-checkbox label {
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .top-control-panel {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .bottom-control-panel {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        .control-btn {
+            padding: 12px 28px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        .control-btn.secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+        .control-btn.secondary:hover {
+            background: #cbd5e0;
+        }
+        .control-btn.success {
+            background: #48bb78;
+            color: white;
+        }
+
+        .tasks-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        .task-item {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+        }
+        .task-header {
+            background: linear-gradient(135deg, #f8f9fc, #f0f2f8);
+            padding: 14px 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .task-number {
+            font-weight: 700;
+            color: #667eea;
+            font-size: 1rem;
+        }
+        .task-body {
+            padding: 20px;
+        }
+        .math-text {
+            font-size: 1rem;
+            background: #fafafc;
+            padding: 14px 16px;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+            margin-bottom: 16px;
+            overflow-x: auto;
+        }
+        .katex { font-size: 1.1rem; }
+        
+        .answer-section {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed #e2e8f0;
+        }
+        .answer-input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-family: inherit;
+        }
+        .answer-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .answer-input.correct {
+            border-color: #48bb78;
+            background: #f0fff4;
+        }
+        .answer-input.incorrect {
+            border-color: #fc8181;
+            background: #fff5f5;
+        }
+        .answer-input.disabled {
+            background: #f8f9fc;
+            border-color: #e2e8f0;
+            color: #718096;
+        }
+        .feedback {
+            margin-top: 8px;
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            border-radius: 10px;
+            display: none;
+        }
+        .feedback.show { display: inline-block; }
+        .feedback.correct { background: #d4edda; color: #155724; }
+        .feedback.incorrect { background: #f8d7da; color: #721c24; }
+
+        .empty-message {
+            text-align: center;
+            padding: 60px;
+            background: white;
+            border-radius: 24px;
+            color: #718096;
+        }
+        
+        .save-notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #48bb78;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 40px;
+            z-index: 2000;
+            animation: slideIn 0.3s ease;
+            display: none;
+        }
+        
+        /* Модальные окна */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+        }
+        .modal-overlay.show {
+            display: flex;
+        }
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 24px;
+            max-width: 90%;
+            width: auto;
+            min-width: 300px;
+            text-align: center;
+        }
+        .modal-content h3 {
+            margin-bottom: 16px;
+            color: #1a1a2e;
+        }
+        .modal-content p {
+            margin-bottom: 20px;
+            color: #4a5568;
+        }
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .modal-buttons button {
+            padding: 10px 24px;
+            border-radius: 30px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+        .btn-danger {
+            background: #fc8181;
+            color: white;
+        }
+        
+        /* Модальное окно результатов с таблицей */
+        .results-modal-content {
+            max-width: 900px;
+            width: 95%;
+            text-align: left;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.85rem;
+        }
+        .results-table th,
+        .results-table td {
+            padding: 12px 8px;
+            text-align: center;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .results-table th {
+            background: #f8f9fc;
+            font-weight: 600;
+            color: #4a5568;
+            position: sticky;
+            top: 0;
+        }
+        .results-table td:first-child,
+        .results-table th:first-child {
+            text-align: left;
+            font-weight: 600;
+        }
+        .correct-answer {
+            color: #48bb78;
+            font-weight: 600;
+        }
+        .incorrect-answer {
+            color: #fc8181;
+            font-weight: 600;
+        }
+        .empty-answer {
+            color: #a0aec0;
+        }
+        .score-badge {
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            line-height: 28px;
+            text-align: center;
+            border-radius: 50%;
+            font-weight: 700;
+        }
+        .score-correct {
+            background: #d4edda;
+            color: #155724;
+        }
+        .score-incorrect {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .score-empty {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+        .results-summary-bar {
+            background: #f8f9fc;
+            padding: 16px 20px;
+            border-radius: 16px;
+            margin: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .total-score {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #667eea;
+        }
+        .warning-text {
+            color: #e53e3e;
+            font-size: 0.85rem;
+        }
+        .celebration-text {
+            color: #38a169;
+            font-weight: 600;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        footer {
+            background: #1a1a2e;
+            color: white;
+            padding: 48px 0 24px;
+            margin-top: 40px;
+        }
+        .footer-content { text-align: center; }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        @media (max-width: 768px) {
+            .constructor-hero h1 { font-size: 1.8rem; }
+            .task-header { flex-direction: column; align-items: flex-start; }
+            .control-btn { padding: 8px 16px; font-size: 0.8rem; }
+            .number-checkbox { padding: 4px 8px; }
+            .number-checkbox label { font-size: 0.8rem; }
+            .results-table th, .results-table td { padding: 8px 4px; font-size: 0.7rem; }
+            .results-modal-content { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="container">
+        <div class="nav-content">
+            <div class="logo">⚡ Максим Ковалёв</div>
+            <div class="nav-links">
+                <a href="index.html">Главная</a>
+                <a href="index.html#about">Обо мне</a>
+                <a href="index.html#subjects">Предметы</a>
+                <a href="index.html#materials">Материалы</a>
+                <a href="index.html#contacts">Контакты</a>
+                <a href="tasks.html" class="tasks-btn"><i class="fas fa-tasks"></i> Задачи</a>
+                <a href="constructor.html" class="constructor-btn"><i class="fas fa-random"></i> Конструктор</a>
+                <a href="profile.html" class="tasks-btn"><i class="fas fa-user"></i> Профиль</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<section class="constructor-hero">
+    <div class="container">
+        <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> На главную</a>
+        <h1><i class="fas fa-random"></i> Конструктор вариантов ОГЭ</h1>
+        <p>Выберите номера заданий для тренировки</p>
+    </div>
+</section>
+
+<div class="container">
+    <div class="selection-panel">
+        <div class="selection-header">
+            <div class="selection-title"><i class="fas fa-check-square"></i> Выберите номера заданий</div>
+            <div>
+                <button class="select-all-btn" id="selectAllBtn">Выбрать все</button>
+                <button class="select-all-btn" id="deselectAllBtn" style="margin-left: 8px;">Снять все</button>
+            </div>
+        </div>
+        
+        <div class="numbers-group">
+            <div class="group-title">📦 Задания 1-5 (группа по тексту)</div>
+            <div class="numbers-grid" id="numbersGrid1_5"></div>
+        </div>
+        
+        <div class="numbers-group">
+            <div class="group-title">🔢 Задания 6-25</div>
+            <div class="numbers-grid" id="numbersGrid6_25"></div>
+        </div>
+    </div>
+
+    <div class="top-control-panel">
+        <button class="control-btn" id="generateBtn"><i class="fas fa-dice-d6"></i> Собрать вариант</button>
+        <button class="control-btn secondary" id="printBtn"><i class="fas fa-print"></i> Распечатать</button>
+    </div>
+
+    <div id="tasksContainer" class="tasks-grid">
+        <div class="empty-message">
+            <i class="fas fa-dice-d6" style="font-size: 3rem; margin-bottom: 16px; display: block;"></i>
+            <p>Выберите номера заданий и нажмите "Собрать вариант"</p>
+        </div>
+    </div>
+
+    <div class="bottom-control-panel">
+        <button class="control-btn success" id="saveDraftBtn"><i class="fas fa-save"></i> Сохранить черновик</button>
+        <button class="control-btn secondary" id="checkAllBtn"><i class="fas fa-check-double"></i> Завершить и проверить</button>
+        <button class="control-btn secondary" id="clearAnswersBtn"><i class="fas fa-eraser"></i> Очистить ответы</button>
+    </div>
+</div>
+
+<div id="saveNotification" class="save-notification">✅ Черновик сохранён!</div>
+
+<!-- Модальное окно подтверждения проверки -->
+<div id="checkConfirmModal" class="modal-overlay">
+    <div class="modal-content">
+        <i class="fas fa-clipboard-list" style="font-size: 3rem; color: #667eea; margin-bottom: 16px; display: block;"></i>
+        <h3>Завершить проверку?</h3>
+        <p>После проверки вы не сможете изменить ответы.</p>
+        <div class="modal-buttons">
+            <button class="btn-primary" id="checkConfirmYesBtn">Да, проверить</button>
+            <button class="btn-secondary" id="checkConfirmNoBtn">Отмена</button>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно подтверждения сохранения -->
+<div id="saveConfirmModal" class="modal-overlay">
+    <div class="modal-content">
+        <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #ecc94b; margin-bottom: 16px; display: block;"></i>
+        <h3>Внимание!</h3>
+        <p>При сохранении нового черновика старый черновик будет удалён без возможности восстановления.</p>
+        <div class="modal-buttons">
+            <button class="btn-danger" id="saveConfirmYesBtn">Да, сохранить</button>
+            <button class="btn-secondary" id="saveConfirmNoBtn">Отмена</button>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно результатов с таблицей -->
+<div id="resultsModal" class="modal-overlay">
+    <div class="modal-content results-modal-content">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <h3 style="margin: 0;"><i class="fas fa-chart-simple"></i> Результаты проверки</h3>
+            <button id="resultsCloseBtn" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #a0aec0;">&times;</button>
+        </div>
+        
+        <div id="resultsSummaryBar" class="results-summary-bar">
+            <div><strong>Всего заданий:</strong> <span id="totalQuestions">0</span></div>
+            <div><strong>Решено:</strong> <span id="answeredCount">0</span></div>
+            <div><strong>Правильно:</strong> <span id="correctCount">0</span></div>
+            <div class="total-score" id="totalScore">0%</div>
+        </div>
+        
+        <div style="overflow-x: auto;">
+            <table class="results-table" id="resultsTable">
+                <thead>
+                    <tr>
+                        <th>Задание</th>
+                        <th>Ваш ответ</th>
+                        <th>Верный ответ</th>
+                        <th>Ваш балл</th>
+                        <th>Макс балл</th>
+                    </tr>
+                </thead>
+                <tbody id="resultsTableBody"></tbody>
+            </table>
+        </div>
+        
+        <div id="resultsWarning" class="warning-text" style="text-align: center; margin-top: 10px;"></div>
+        <div id="resultsCelebration" class="celebration-text" style="text-align: center; margin-top: 10px;"></div>
+        
+        <div class="modal-buttons" style="margin-top: 20px;">
+            <button class="btn-primary" id="resultsNewVariantBtn"><i class="fas fa-dice-d6"></i> Новый вариант</button>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="index.html">Главная</a>
+                <a href="tasks.html">Сборник задач</a>
+                <a href="constructor.html">Конструктор вариантов</a>
+                <a href="index.html#contacts">Контакты</a>
+            </div>
+            <p>© 2026 Максим Ковалёв · Репетитор по математике и физике</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+    const STORAGE_KEY = "math_tasks";
+    const SELECTED_NUMBERS_KEY = "selected_numbers";
+    
+    let currentVariant = {};
+    let isChecked = false;
+    let selectedNumbers = {
+        "1": true, "2": true, "3": true, "4": true, "5": true,
+        "6": true, "7": true, "8": true, "9": true, "10": true,
+        "11": true, "12": true, "13": true, "14": true, "15": true,
+        "16": true, "17": true, "18": true, "19": true, "20": true,
+        "21": true, "22": true, "23": true, "24": true, "25": true
+    };
+
+    const numbers1_5 = ["1", "2", "3", "4", "5"];
+    const numbers6_25 = ["6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"];
+
+    function saveSelectedNumbers() {
+        localStorage.setItem(SELECTED_NUMBERS_KEY, JSON.stringify(selectedNumbers));
+    }
+
+    function loadSelectedNumbers() {
+        const saved = localStorage.getItem(SELECTED_NUMBERS_KEY);
+        if (saved) {
+            selectedNumbers = JSON.parse(saved);
+        }
+    }
+
+    function renderNumbersGrid() {
+        const grid1_5 = document.getElementById('numbersGrid1_5');
+        let html1_5 = '';
+        for (const num of numbers1_5) {
+            html1_5 += `
+                <div class="number-checkbox" onclick="toggleNumber('${num}')">
+                    <input type="checkbox" id="chk_${num}" ${selectedNumbers[num] ? 'checked' : ''} onclick="event.stopPropagation(); toggleNumber('${num}')">
+                    <label for="chk_${num}">Задание ${num}</label>
+                </div>
+            `;
+        }
+        grid1_5.innerHTML = html1_5;
+        
+        const grid6_25 = document.getElementById('numbersGrid6_25');
+        let html6_25 = '';
+        for (const num of numbers6_25) {
+            html6_25 += `
+                <div class="number-checkbox" onclick="toggleNumber('${num}')">
+                    <input type="checkbox" id="chk_${num}" ${selectedNumbers[num] ? 'checked' : ''} onclick="event.stopPropagation(); toggleNumber('${num}')">
+                    <label for="chk_${num}">Задание ${num}</label>
+                </div>
+            `;
+        }
+        grid6_25.innerHTML = html6_25;
+    }
+
+    function toggleNumber(num) {
+        if (isChecked) return;
+        
+        const numInt = parseInt(num);
+        
+        if (numInt >= 1 && numInt <= 5) {
+            const newState = !selectedNumbers[num];
+            for (let i = 1; i <= 5; i++) {
+                selectedNumbers[i.toString()] = newState;
+                const chk = document.getElementById(`chk_${i}`);
+                if (chk) chk.checked = newState;
+            }
+        } else {
+            selectedNumbers[num] = !selectedNumbers[num];
+            const chk = document.getElementById(`chk_${num}`);
+            if (chk) chk.checked = selectedNumbers[num];
+        }
+        
+        saveSelectedNumbers();
+    }
+
+    function selectAll() {
+        if (isChecked) return;
+        for (const num of [...numbers1_5, ...numbers6_25]) {
+            selectedNumbers[num] = true;
+        }
+        renderNumbersGrid();
+        saveSelectedNumbers();
+    }
+
+    function deselectAll() {
+        if (isChecked) return;
+        for (const num of [...numbers1_5, ...numbers6_25]) {
+            selectedNumbers[num] = false;
+        }
+        renderNumbersGrid();
+        saveSelectedNumbers();
+    }
+
+    function loadTasks() {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) return JSON.parse(saved);
+        return [];
+    }
+
+    function getRandomTaskForNumber(ogeNumber) {
+        const allTasks = loadTasks();
+        let tasksForNumber;
+        
+        if (ogeNumber === "1" || ogeNumber === "2" || ogeNumber === "3" || ogeNumber === "4" || ogeNumber === "5") {
+            tasksForNumber = allTasks.filter(t => t.ogeNumber === "group-1-5");
+        } else {
+            tasksForNumber = allTasks.filter(t => t.ogeNumber === ogeNumber);
+        }
+        
+        if (tasksForNumber.length === 0) {
+            return {
+                id: null,
+                text: "Задач для этого номера пока нет в каталоге",
+                answer: "",
+                variant: null,
+                difficulty: "medium",
+                difficultyName: "Средний"
+            };
+        }
+        
+        const randomIndex = Math.floor(Math.random() * tasksForNumber.length);
+        return tasksForNumber[randomIndex];
+    }
+
+    function generateVariant() {
+        if (isChecked) {
+            isChecked = false;
+        }
+        
+        const selected = [];
+        for (const num of [...numbers1_5, ...numbers6_25]) {
+            if (selectedNumbers[num]) {
+                selected.push(num);
+            }
+        }
+        
+        if (selected.length === 0) {
+            alert('Выберите хотя бы один номер задания!');
+            return;
+        }
+        
+        const newVariant = {};
+        for (const num of selected) {
+            newVariant[num] = getRandomTaskForNumber(num);
+        }
+        currentVariant = newVariant;
+        renderVariant();
+        showNotification('🎲 Вариант собран!');
+    }
+
+    function showNotification(message) {
+        const notification = document.getElementById('saveNotification');
+        notification.textContent = message;
+        notification.style.display = 'block';
+        setTimeout(() => {
+            notification.style.display = 'none';
+        }, 2000);
+    }
+
+    function showCheckConfirmModal() {
+        const modal = document.getElementById('checkConfirmModal');
+        const confirmYes = document.getElementById('checkConfirmYesBtn');
+        const confirmNo = document.getElementById('checkConfirmNoBtn');
+        
+        const yesHandler = () => {
+            modal.classList.remove('show');
+            confirmYes.removeEventListener('click', yesHandler);
+            confirmNo.removeEventListener('click', noHandler);
+            performCheck();
+        };
+        
+        const noHandler = () => {
+            modal.classList.remove('show');
+            confirmYes.removeEventListener('click', yesHandler);
+            confirmNo.removeEventListener('click', noHandler);
+        };
+        
+        confirmYes.addEventListener('click', yesHandler);
+        confirmNo.addEventListener('click', noHandler);
+        
+        modal.classList.add('show');
+    }
+
+    function showSaveConfirmModal(callback) {
+        const modal = document.getElementById('saveConfirmModal');
+        const confirmYes = document.getElementById('saveConfirmYesBtn');
+        const confirmNo = document.getElementById('saveConfirmNoBtn');
+        
+        const yesHandler = () => {
+            modal.classList.remove('show');
+            confirmYes.removeEventListener('click', yesHandler);
+            confirmNo.removeEventListener('click', noHandler);
+            callback(true);
+        };
+        
+        const noHandler = () => {
+            modal.classList.remove('show');
+            confirmYes.removeEventListener('click', yesHandler);
+            confirmNo.removeEventListener('click', noHandler);
+            callback(false);
+        };
+        
+        confirmYes.addEventListener('click', yesHandler);
+        confirmNo.addEventListener('click', noHandler);
+        
+        modal.classList.add('show');
+    }
+
+    function saveDraft() {
+        const existingDraft = localStorage.getItem('current_variant_draft');
+        
+        if (existingDraft) {
+            showSaveConfirmModal((confirmed) => {
+                if (confirmed) {
+                    performSaveDraft();
+                }
+            });
+        } else {
+            performSaveDraft();
+        }
+    }
+
+    function performSaveDraft() {
+        const draftToSave = {};
+        for (const num of Object.keys(currentVariant)) {
+            draftToSave[num] = currentVariant[num];
+        }
+        
+        const userAnswers = {};
+        for (const num of Object.keys(currentVariant)) {
+            const inputEl = document.getElementById(`answer-${num}`);
+            if (inputEl) {
+                userAnswers[num] = inputEl.value;
+            }
+        }
+        
+        const draft = {
+            variant: draftToSave,
+            answers: userAnswers,
+            savedAt: new Date().toISOString(),
+            expiresAt: new Date(Date.now() + 3 * 60 * 60 * 1000).toISOString()
+        };
+        
+        localStorage.setItem('current_variant_draft', JSON.stringify(draft));
+        localStorage.setItem('current_variant_time', new Date().toISOString());
+        localStorage.setItem('selected_numbers_draft', JSON.stringify(selectedNumbers));
+        
+        showNotification('✅ Черновик сохранён!');
+    }
+
+    function loadDraft() {
+        const saved = localStorage.getItem('current_variant_draft');
+        const savedTime = localStorage.getItem('current_variant_time');
+        const savedSelected = localStorage.getItem('selected_numbers_draft');
+        
+        if (saved && savedTime) {
+            const draft = JSON.parse(saved);
+            const savedDate = new Date(savedTime);
+            const now = new Date();
+            const hoursDiff = (now - savedDate) / (1000 * 60 * 60);
+            
+            if (hoursDiff < 3) {
+                currentVariant = draft.variant;
+                
+                if (savedSelected) {
+                    const loadedSelected = JSON.parse(savedSelected);
+                    for (const num of [...numbers1_5, ...numbers6_25]) {
+                        if (loadedSelected[num] !== undefined) {
+                            selectedNumbers[num] = loadedSelected[num];
+                        }
+                    }
+                    renderNumbersGrid();
+                }
+                
+                renderVariant();
+                
+                setTimeout(() => {
+                    for (const num of Object.keys(draft.answers || {})) {
+                        const inputEl = document.getElementById(`answer-${num}`);
+                        if (inputEl) {
+                            inputEl.value = draft.answers[num];
+                        }
+                    }
+                }, 100);
+                
+                showNotification('📂 Загружен сохранённый черновик');
+                return true;
+            } else {
+                localStorage.removeItem('current_variant_draft');
+                localStorage.removeItem('current_variant_time');
+                localStorage.removeItem('selected_numbers_draft');
+            }
+        }
+        return false;
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        }).replace(/\n/g, '<br>');
+    }
+
+    function renderMathFormula(text) {
+        if (!text) return '';
+        const regex = /\$\$([^$]+)\$\$/g;
+        let html = '';
+        let lastIndex = 0;
+        let match;
+        
+        while ((match = regex.exec(text)) !== null) {
+            if (match.index > lastIndex) {
+                html += escapeHtml(text.substring(lastIndex, match.index));
+            }
+            const formula = match[1];
+            try {
+                html += katex.renderToString(formula, { throwOnError: false, displayMode: false });
+            } catch(e) {
+                html += escapeHtml(formula);
+            }
+            lastIndex = regex.lastIndex;
+        }
+        
+        if (lastIndex < text.length) {
+            html += escapeHtml(text.substring(lastIndex));
+        }
+        
+        if (html === '') {
+            return escapeHtml(text);
+        }
+        return html;
+    }
+
+    function normalizeAnswer(answer) {
+        if (!answer) return null;
+        let normalized = answer.trim().replace(/\s/g, '');
+        normalized = normalized.replace(',', '.');
+        const num = parseFloat(normalized);
+        if (!isNaN(num) && isFinite(num)) return num;
+        const fractionMatch = normalized.match(/^(-?\d+)\/(\d+)$/);
+        if (fractionMatch) {
+            const numerator = parseInt(fractionMatch[1], 10);
+            const denominator = parseInt(fractionMatch[2], 10);
+            if (denominator !== 0) return numerator / denominator;
+        }
+        return null;
+    }
+
+    function isAnswerCorrect(userAnswer, correctAnswer) {
+        if (!correctAnswer) return false;
+        let correctNum = parseFloat(correctAnswer.toString().trim().replace(/\s/g, '').replace(',', '.'));
+        let userNum = normalizeAnswer(userAnswer);
+        if (userNum !== null && !isNaN(correctNum)) {
+            return Math.abs(userNum - correctNum) < 0.0001;
+        }
+        const userStr = userAnswer.trim().replace(/\s/g, '').replace(',', '.');
+        const correctStr = correctAnswer.toString().trim().replace(/\s/g, '').replace(',', '.');
+        return userStr === correctStr;
+    }
+
+    function performCheck() {
+        isChecked = true;
+        
+        // Блокируем все поля ввода
+        for (const number of Object.keys(currentVariant)) {
+            const inputEl = document.getElementById(`answer-${number}`);
+            if (inputEl) {
+                inputEl.disabled = true;
+                inputEl.classList.add('disabled');
+            }
+        }
+        
+        // Блокируем выбор номеров заданий
+        for (const num of [...numbers1_5, ...numbers6_25]) {
+            const chk = document.getElementById(`chk_${num}`);
+            if (chk) {
+                chk.disabled = true;
+            }
+        }
+        
+        const results = [];
+        let correctCount = 0;
+        let answeredCount = 0;
+        const sortedNumbers = Object.keys(currentVariant).sort((a,b) => parseInt(a) - parseInt(b));
+        const maxScore = sortedNumbers.length;
+        
+        for (const number of sortedNumbers) {
+            const task = currentVariant[number];
+            const inputEl = document.getElementById(`answer-${number}`);
+            const userAnswer = inputEl ? inputEl.value : '';
+            const userAnswerDisplay = userAnswer.trim() || '(не введён)';
+            const correctAnswerDisplay = task.answer || '(нет ответа)';
+            
+            let isCorrect = false;
+            let hasAnswer = false;
+            
+            if (userAnswer.trim() && task && task.answer) {
+                hasAnswer = true;
+                isCorrect = isAnswerCorrect(userAnswer, task.answer);
+                if (isCorrect) correctCount++;
+                answeredCount++;
+            }
+            
+            results.push({
+                number: number,
+                userAnswer: userAnswerDisplay,
+                correctAnswer: correctAnswerDisplay,
+                isCorrect: isCorrect,
+                hasAnswer: hasAnswer,
+                score: isCorrect ? 1 : 0
+            });
+        }
+        
+        showResultsModal(results, correctCount, answeredCount, maxScore);
+    }
+
+    function showResultsModal(results, correctCount, answeredCount, maxScore) {
+        const modal = document.getElementById('resultsModal');
+        const tbody = document.getElementById('resultsTableBody');
+        const totalQuestionsSpan = document.getElementById('totalQuestions');
+        const answeredCountSpan = document.getElementById('answeredCount');
+        const correctCountSpan = document.getElementById('correctCount');
+        const totalScoreSpan = document.getElementById('totalScore');
+        const warningEl = document.getElementById('resultsWarning');
+        const celebrationEl = document.getElementById('resultsCelebration');
+        
+        totalQuestionsSpan.textContent = maxScore;
+        answeredCountSpan.textContent = answeredCount;
+        correctCountSpan.textContent = correctCount;
+        const percentage = maxScore > 0 ? Math.round((correctCount / maxScore) * 100) : 0;
+        totalScoreSpan.textContent = `${percentage}%`;
+        
+        let tableHtml = '';
+        for (const result of results) {
+            const scoreClass = result.hasAnswer ? (result.isCorrect ? 'score-correct' : 'score-incorrect') : 'score-empty';
+            const answerClass = result.hasAnswer ? (result.isCorrect ? 'correct-answer' : 'incorrect-answer') : 'empty-answer';
+            
+            tableHtml += `
+                <tr>
+                    <td><strong>Задание ${result.number}</strong></td>
+                    <td class="${answerClass}">${escapeHtml(result.userAnswer)}</td>
+                    <td class="correct-answer">${escapeHtml(result.correctAnswer)}</td>
+                    <td><span class="score-badge ${scoreClass}">${result.score}</span></td>
+                    <td>1</td>
+                </tr>
+            `;
+        }
+        tbody.innerHTML = tableHtml;
+        
+        if (answeredCount < maxScore) {
+            warningEl.innerHTML = `⚠️ Не все задания решены (${answeredCount} из ${maxScore})`;
+        } else {
+            warningEl.innerHTML = '';
+        }
+        
+        if (correctCount === maxScore && answeredCount === maxScore) {
+            celebrationEl.innerHTML = '🎉 Отлично! Все задания решены верно! 🎉';
+        } else {
+            celebrationEl.innerHTML = '';
+        }
+        
+        modal.classList.add('show');
+    }
+
+    function closeResultsModal() {
+        const modal = document.getElementById('resultsModal');
+        modal.classList.remove('show');
+    }
+
+    function newVariantFromResults() {
+        closeResultsModal();
+        generateVariant();
+    }
+
+    function clearAllAnswers() {
+        if (isChecked) return;
+        
+        for (const number of Object.keys(currentVariant)) {
+            const inputEl = document.getElementById(`answer-${number}`);
+            const feedbackEl = document.getElementById(`feedback-${number}`);
+            if (inputEl) {
+                inputEl.value = '';
+                inputEl.classList.remove('correct', 'incorrect');
+            }
+            if (feedbackEl) {
+                feedbackEl.classList.remove('show');
+                feedbackEl.innerHTML = '';
+            }
+        }
+        showNotification('🧹 Все ответы очищены');
+    }
+
+    function renderVariant() {
+        const container = document.getElementById('tasksContainer');
+        const sortedNumbers = Object.keys(currentVariant).sort((a,b) => parseInt(a) - parseInt(b));
+        
+        if (sortedNumbers.length === 0) {
+            container.innerHTML = `<div class="empty-message">
+                <i class="fas fa-dice-d6" style="font-size: 3rem; margin-bottom: 16px; display: block;"></i>
+                <p>Выберите номера заданий и нажмите "Собрать вариант"</p>
+            </div>`;
+            return;
+        }
+        
+        let html = '';
+        for (const num of sortedNumbers) {
+            const task = currentVariant[num];
+            if (!task) continue;
+            
+            const renderedText = renderMathFormula(task.text);
+            
+            html += `
+            <div class="task-item">
+                <div class="task-header">
+                    <span class="task-number"><strong>Задание ${num}</strong></span>
+                </div>
+                <div class="task-body">
+                    <div class="math-text">${renderedText}</div>
+                    <div class="answer-section">
+                        <input type="text" class="answer-input" id="answer-${num}" placeholder="Ваш ответ">
+                        <div class="feedback" id="feedback-${num}"></div>
+                    </div>
+                </div>
+            </div>`;
+        }
+        
+        container.innerHTML = html;
+        
+        setTimeout(() => {
+            const mathElements = document.querySelectorAll('.math-text');
+            mathElements.forEach(el => {
+                if (el.innerHTML.includes('katex')) return;
+                const text = el.innerText;
+                if (text && text.includes('$$')) {
+                    const rendered = renderMathFormula(text);
+                    if (rendered) el.innerHTML = rendered;
+                }
+            });
+        }, 50);
+    }
+
+    function printVariant() {
+        const printWindow = window.open('', '_blank');
+        const tasksHtml = document.getElementById('tasksContainer').innerHTML;
+        
+        const cleanHtml = tasksHtml.replace(/<div class="feedback[^>]*>.*?<\/div>/g, '');
+        
+        printWindow.document.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <title>Вариант ОГЭ — Максим Ковалёв</title>
+                <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+                <style>
+                    * { margin: 0; padding: 0; box-sizing: border-box; }
+                    body {
+                        font-family: 'Inter', sans-serif;
+                        padding: 40px;
+                        line-height: 1.5;
+                    }
+                    h1 { text-align: center; margin-bottom: 10px; }
+                    .subtitle { text-align: center; margin-bottom: 30px; color: #666; }
+                    .task-item {
+                        margin-bottom: 30px;
+                        page-break-inside: avoid;
+                    }
+                    .task-header {
+                        font-weight: 600;
+                        margin-bottom: 10px;
+                        padding-bottom: 5px;
+                        border-bottom: 1px solid #ddd;
+                    }
+                    .math-text {
+                        padding: 10px;
+                        background: #f8f9fc;
+                        border-left: 4px solid #667eea;
+                        margin-bottom: 15px;
+                    }
+                    .answer-section {
+                        margin-top: 10px;
+                        padding-top: 10px;
+                        border-top: 1px dashed #ccc;
+                    }
+                    .answer-placeholder {
+                        display: inline-block;
+                        width: 200px;
+                        border-bottom: 1px solid #000;
+                        margin-left: 10px;
+                    }
+                    footer {
+                        margin-top: 40px;
+                        text-align: center;
+                        font-size: 0.8rem;
+                        color: #999;
+                    }
+                    @media print {
+                        body { padding: 20px; }
+                    }
+                </style>
+            </head>
+            <body>
+                <h1>Вариант ОГЭ по математике</h1>
+                <div class="subtitle">© Максим Ковалёв — репетитор по математике</div>
+                ${cleanHtml.replace(/placeholder="Ваш ответ"/g, 'placeholder="__________"')}
+                <footer>
+                    <p>Удачи на экзамене! 🍀</p>
+                </footer>
+            </body>
+            </html>
+        `);
+        
+        printWindow.document.close();
+        setTimeout(() => { printWindow.print(); }, 500);
+    }
+
+    window.toggleNumber = toggleNumber;
+
+    document.getElementById('generateBtn').addEventListener('click', generateVariant);
+    document.getElementById('saveDraftBtn').addEventListener('click', saveDraft);
+    document.getElementById('checkAllBtn').addEventListener('click', showCheckConfirmModal);
+    document.getElementById('clearAnswersBtn').addEventListener('click', clearAllAnswers);
+    document.getElementById('printBtn').addEventListener('click', printVariant);
+    document.getElementById('selectAllBtn').addEventListener('click', selectAll);
+    document.getElementById('deselectAllBtn').addEventListener('click', deselectAll);
+    document.getElementById('resultsNewVariantBtn').addEventListener('click', newVariantFromResults);
+    document.getElementById('resultsCloseBtn').addEventListener('click', closeResultsModal);
+
+    loadSelectedNumbers();
+    renderNumbersGrid();
+    
+    const loaded = loadDraft();
+    
+    function waitForKatex() {
+        if (typeof katex !== 'undefined') {
+            // Готово
+        } else {
+            setTimeout(waitForKatex, 100);
+        }
+    }
+    waitForKatex();
+</script>
+</body>
+</html>

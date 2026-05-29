@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Тест добавления задач</title>
+</head>
+<body>
+    <h1>Тест добавления задач</h1>
+    
+    <input type="text" id="taskText" placeholder="Условие" style="width: 300px;">
+    <input type="text" id="taskAnswer" placeholder="Ответ">
+    <button onclick="addTask()">Добавить задачу</button>
+    
+    <button onclick="showTasks()">Показать все задачи</button>
+    
+    <pre id="output"></pre>
+    
+    <script>
+        const STORAGE_KEY = "math_tasks";
+        
+        function addTask() {
+            const text = document.getElementById('taskText').value;
+            const answer = document.getElementById('taskAnswer').value;
+            
+            if (!text || !answer) {
+                alert('Заполните поля!');
+                return;
+            }
+            
+            let tasks = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+            
+            const newId = tasks.length > 0 ? Math.max(...tasks.map(t => t.id)) + 1 : 601;
+            
+            const newTask = {
+                id: newId,
+                text: text,
+                answer: answer,
+                exam: "oge",
+                ogeNumber: "6",
+                variant: "Вид 1",
+                difficulty: "easy",
+                difficultyName: "Лёгкий"
+            };
+            
+            tasks.push(newTask);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+            
+            document.getElementById('output').innerHTML = '✅ Задача добавлена! ID: ' + newId;
+            document.getElementById('taskText').value = '';
+            document.getElementById('taskAnswer').value = '';
+        }
+        
+        function showTasks() {
+            const tasks = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+            document.getElementById('output').innerHTML = JSON.stringify(tasks, null, 2);
+        }
+        
+        // Показать задачи при загрузке
+        showTasks();
+    </script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Админ-панель (простая)</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        input, textarea, select { display: block; width: 100%; margin: 10px 0; padding: 8px; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background: #f0f0f0; }
+        .success { background: #d4edda; color: #155724; padding: 10px; margin: 10px 0; display: none; }
+    </style>
+</head>
+<body>
+    <h1>📚 Админ-панель (упрощённая)</h1>
+    
+    <div id="successMsg" class="success">✅ Задача добавлена!</div>
+    
+    <h3>Добавить новую задачу</h3>
+    <textarea id="taskText" rows="3" placeholder="Условие задачи (например: Найдите значение выражения $$\frac{1}{10} + \frac{29}{20}$$)"></textarea>
+    <input type="text" id="taskAnswer" placeholder="Ответ (например: 1.55)">
+    
+    <select id="taskVariant">
+        <option value="Вид 1">Вид 1</option>
+        <option value="Вид 2">Вид 2</option>
+        <option value="Вид 3">Вид 3</option>
+    </select>
+    
+    <select id="taskDifficulty">
+        <option value="easy">🟢 Лёгкая</option>
+        <option value="medium">🟡 Средняя</option>
+        <option value="hard">🔴 Сложная</option>
+    </select>
+    
+    <button onclick="addTask()">➕ Добавить задачу</button>
+    <button onclick="showTasks()">📋 Показать все задачи</button>
+    <button onclick="clearTasks()">🗑️ Очистить все задачи</button>
+    
+    <h3>Список задач</h3>
+    <div id="tasksList"></div>
+    
+    <script>
+        const STORAGE_KEY = "math_tasks";
+        
+        function showMessage(text, isError = false) {
+            const msg = document.getElementById('successMsg');
+            msg.textContent = isError ? '❌ ' + text : '✅ ' + text;
+            msg.style.background = isError ? '#f8d7da' : '#d4edda';
+            msg.style.color = isError ? '#721c24' : '#155724';
+            msg.style.display = 'block';
+            setTimeout(() => { msg.style.display = 'none'; }, 2000);
+        }
+        
+        function addTask() {
+            console.log('🔵 addTask() вызвана');
+            
+            const text = document.getElementById('taskText').value.trim();
+            const answer = document.getElementById('taskAnswer').value.trim();
+            const variant = document.getElementById('taskVariant').value;
+            const difficulty = document.getElementById('taskDifficulty').value;
+            
+            console.log('Текст:', text);
+            console.log('Ответ:', answer);
+            
+            if (!text) {
+                alert('Введите условие задачи!');
+                return;
+            }
+            if (!answer) {
+                alert('Введите ответ!');
+                return;
+            }
+            
+            // Получаем текущие задачи
+            let tasks = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+            console.log('Текущих задач:', tasks.length);
+            
+            // Новый ID
+            const maxId = tasks.length > 0 ? Math.max(...tasks.map(t => t.id)) : 600;
+            const newId = maxId + 1;
+            
+            // Создаём задачу
+            const newTask = {
+                id: newId,
+                text: text,
+                answer: answer,
+                exam: "oge",
+                ogeNumber: "6",
+                variant: variant,
+                difficulty: difficulty,
+                difficultyName: difficulty === "easy" ? "Лёгкий" : difficulty === "medium" ? "Средний" : "Сложный"
+            };
+            
+            console.log('Новая задача:', newTask);
+            
+            // Сохраняем
+            tasks.push(newTask);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+            
+            console.log('Сохранено! Всего задач:', tasks.length);
+            
+            // Очищаем поля
+            document.getElementById('taskText').value = '';
+            document.getElementById('taskAnswer').value = '';
+            
+            showMessage('Задача добавлена! ID: ' + newId);
+            
+            // Обновляем список
+            showTasks();
+        }
+        
+        function showTasks() {
+            console.log('🔵 showTasks() вызвана');
+            const tasks = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+            console.log('Найдено задач:', tasks.length);
+            
+            const container = document.getElementById('tasksList');
+            
+            if (tasks.length === 0) {
+                container.innerHTML = '<p>Нет задач. Добавьте первую!</p>';
+                return;
+            }
+            
+            let html = '<table><tr><th>ID</th><th>Условие</th><th>Ответ</th><th>Вид</th><th>Действия</th></tr>';
+            for (const task of tasks) {
+                html += `
+                    <tr>
+                        <td>${task.id}</td>
+                        <td>${task.text.substring(0, 50)}...</td>
+                        <td>${task.answer}</td>
+                        <td>${task.variant}</td>
+                        <td><button onclick="deleteTask(${task.id})">🗑️ Удалить</button></td>
+                    </tr>
+                `;
+            }
+            html += '</table>';
+            container.innerHTML = html;
+        }
+        
+        function deleteTask(id) {
+            if (confirm('Удалить задачу?')) {
+                let tasks = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+                tasks = tasks.filter(t => t.id !== id);
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+                showMessage('Задача удалена!');
+                showTasks();
+            }
+        }
+        
+        function clearTasks() {
+            if (confirm('Удалить ВСЕ задачи?')) {
+                localStorage.removeItem(STORAGE_KEY);
+                showMessage('Все задачи удалены!');
+                showTasks();
+            }
+        }
+        
+        // Показываем задачи при загрузке
+        showTasks();
+        
+        console.log('🚀 Страница загружена');
+    </script>
+</body>
+</html>

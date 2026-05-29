@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Максим Ковалёв — репетитор по математике и физике</title>
+    <meta name="description" content="Студент МГТУ им. Баумана. Репетитор по математике и физике. Подготовка к ОГЭ и ЕГЭ, помощь по школьной программе 5-11 класс.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #eef2f7 100%);
+            color: #1a1a2e;
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .navbar {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #4a5568;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover { color: #667eea; }
+
+        .tasks-btn, .constructor-btn, .profile-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white !important;
+            padding: 8px 20px;
+            border-radius: 30px;
+        }
+
+        .login-link {
+            background: transparent;
+            border: 1px solid #667eea;
+            color: #667eea !important;
+            padding: 8px 20px;
+            border-radius: 30px;
+        }
+
+        .logout-nav-btn {
+            background: none;
+            border: 1px solid #e2e8f0;
+            padding: 8px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            font-family: inherit;
+            font-size: inherit;
+        }
+
+        .logout-nav-btn:hover {
+            background: #fc8181;
+            color: white;
+            border-color: #fc8181;
+        }
+
+        .admin-link-nav {
+            background: #e53e3e;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+        }
+
+        .hero {
+            padding: 80px 0 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 0 0 40px 40px;
+            margin-bottom: 40px;
+        }
+
+        .hero-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 48px;
+        }
+
+        .hero-text { flex: 1; min-width: 280px; }
+        .hero-text h1 { font-size: 3rem; font-weight: 700; margin-bottom: 16px; line-height: 1.2; }
+        .hero-text .highlight { background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 30px; display: inline-block; font-size: 0.9rem; margin-bottom: 20px; }
+        .hero-text p { font-size: 1.1rem; opacity: 0.95; margin-bottom: 24px; line-height: 1.6; }
+
+        .hero-stats {
+            display: flex;
+            gap: 32px;
+            margin-top: 32px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .stat { text-align: center; }
+        .stat-number { font-size: 2rem; font-weight: 700; }
+        .stat-label { font-size: 0.85rem; opacity: 0.8; }
+
+        .hero-avatar {
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .hero-avatar .avatar-placeholder { font-size: 80px; }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 32px;
+            border-radius: 40px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        .btn-primary { background: white; color: #667eea; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+        .btn-outline { background: transparent; border: 2px solid white; color: white; }
+        .btn-outline:hover { background: white; color: #667eea; transform: translateY(-2px); }
+        .btn-gradient { background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; }
+        .btn-gradient:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4); }
+        .btn-block { width: 100%; text-align: center; }
+
+        section { padding: 60px 0; }
+        .section-title { font-size: 2rem; font-weight: 700; margin-bottom: 40px; text-align: center; color: #1a1a2e; }
+        .section-title span { background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+        .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
+
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 28px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .card-icon { font-size: 2.5rem; margin-bottom: 20px; }
+        .card h3 { font-size: 1.3rem; margin-bottom: 12px; color: #1a1a2e; }
+        .card p { color: #4a5568; line-height: 1.6; }
+
+        .subject-card {
+            text-align: center;
+            background: white;
+            border-radius: 20px;
+            padding: 32px 24px;
+            transition: all 0.3s;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .subject-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(102, 126, 234, 0.15); border-color: #667eea; }
+        .subject-icon { font-size: 3rem; margin-bottom: 16px; }
+        .subject-card h3 { font-size: 1.4rem; margin-bottom: 12px; color: #1a1a2e; }
+        .subject-card ul { list-style: none; text-align: center; }
+        .subject-card li { padding: 8px 0; color: #4a5568; }
+
+        .price-table {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 24px;
+            border-bottom: 1px solid #edf2f7;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .price-row:last-child { border-bottom: none; }
+        .price-name { font-weight: 500; color: #4a5568; }
+        .price-value { font-weight: 700; color: #667eea; font-size: 1.2rem; }
+        .price-note { text-align: center; margin-top: 20px; color: #718096; font-size: 0.85rem; }
+
+        .reviews-slider { position: relative; overflow: hidden; border-radius: 24px; }
+        .reviews-container { display: flex; transition: transform 0.4s ease; }
+        .review-card { flex: 0 0 100%; padding: 32px; background: white; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .review-author { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+        .review-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: white;
+        }
+        .review-info h4 { font-size: 1.1rem; margin-bottom: 4px; }
+        .review-info .stars { color: #fbbf24; font-size: 0.85rem; }
+        .review-text { font-size: 1rem; line-height: 1.7; color: #4a5568; font-style: italic; }
+        .review-result { display: inline-block; margin-top: 16px; padding: 6px 14px; background: #e8f0fe; color: #667eea; border-radius: 30px; font-size: 0.8rem; font-weight: 500; }
+
+        .slider-dots { display: flex; justify-content: center; gap: 10px; margin-top: 24px; }
+        .slider-dot { width: 10px; height: 10px; border-radius: 50%; background: #cbd5e0; cursor: pointer; transition: all 0.3s; }
+        .slider-dot.active { width: 30px; border-radius: 10px; background: #667eea; }
+
+        .material-link {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 18px 24px;
+            background: white;
+            border-radius: 16px;
+            text-decoration: none;
+            transition: all 0.3s;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        .material-link:hover { transform: translateX(8px); border-color: #667eea; box-shadow: 0 5px 15px rgba(102, 126, 234, 0.1); }
+        .material-icon { font-size: 2rem; }
+        .material-info strong { display: block; font-size: 1rem; color: #1a1a2e; margin-bottom: 4px; }
+        .material-info small { font-size: 0.75rem; color: #a0aec0; }
+
+        .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .contact-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px;
+            background: white;
+            border-radius: 20px;
+            text-decoration: none;
+            transition: all 0.3s;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        .contact-card:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.3rem;
+        }
+        .contact-info h4 { font-size: 0.85rem; color: #718096; margin-bottom: 4px; }
+        .contact-info p { font-weight: 600; color: #1a1a2e; }
+
+        .form-card {
+            background: white;
+            border-radius: 32px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+        }
+        .form-group { margin-bottom: 20px; }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .faq-item {
+            background: white;
+            border-radius: 16px;
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+        .faq-question i { transition: transform 0.3s; color: #667eea; }
+        .faq-item.active .faq-question i { transform: rotate(180deg); }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            padding: 0 24px;
+            color: #4a5568;
+            line-height: 1.6;
+        }
+        .faq-item.active .faq-answer { max-height: 200px; padding: 0 24px 20px; }
+
+        footer {
+            background: #1a1a2e;
+            color: white;
+            padding: 48px 0 24px;
+            margin-top: 40px;
+        }
+        .footer-content { text-align: center; }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+        .footer-links a:hover { opacity: 1; }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1100;
+        }
+        .modal.show { display: flex; }
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 32px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+        .modal-icon { font-size: 3rem; margin-bottom: 16px; }
+
+        @media (max-width: 768px) {
+            .container { padding: 0 20px; }
+            .hero { padding: 48px 0 40px; }
+            .hero-text h1 { font-size: 2rem; }
+            .hero-avatar { width: 200px; height: 200px; }
+            .section-title { font-size: 1.5rem; }
+            .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+            .nav-content { flex-direction: column; text-align: center; }
+            .nav-links { justify-content: center; }
+            .hero-stats { gap: 16px; }
+            .stat-number { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="container">
+        <div class="nav-content">
+            <div class="logo">⚡ Максим Ковалёв</div>
+            <div class="nav-links" id="navLinks">
+                <a href="#about">Обо мне</a>
+                <a href="#subjects">Предметы</a>
+                <a href="#materials">Материалы</a>
+                <a href="#contacts">Контакты</a>
+                <a href="tasks.html" class="tasks-btn"><i class="fas fa-tasks"></i> Задачи</a>
+                <a href="constructor.html" class="constructor-btn"><i class="fas fa-random"></i> Конструктор</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<section class="hero">
+    <div class="container">
+        <div class="hero-content">
+            <div class="hero-text animate-on-scroll">
+                <span class="highlight">🎓 Студент МГТУ им. Н.Э. Баумана</span>
+                <h1>Репетитор по <span style="background: white; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">математике и физике</span></h1>
+                <p>Помогаю школьникам 5-11 классов разобраться в точных науках без скучной зубрежки. Подготовка к ОГЭ и ЕГЭ, повышение успеваемости.</p>
+                <div class="hero-stats">
+                    <div class="stat"><div class="stat-number">20+</div><div class="stat-label">учеников</div></div>
+                    <div class="stat"><div class="stat-number">4.9</div><div class="stat-label">средний рейтинг</div></div>
+                    <div class="stat"><div class="stat-number">92.3</div><div class="stat-label">средний балл ЕГЭ</div></div>
+                    <div class="stat"><div class="stat-number">5</div><div class="stat-label">ОГЭ (отлично)</div></div>
+                </div>
+                <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-top: 24px;">
+                    <button class="btn btn-primary" id="contactBtnNav">📝 Записаться на пробный урок</button>
+                    <a href="tasks.html" class="btn btn-outline"><i class="fas fa-tasks"></i> Решать задачи</a>
+                </div>
+            </div>
+            <div class="hero-avatar animate-on-scroll">
+                <img src="maxim.jpg" alt="Максим Ковалёв" onerror="this.parentElement.innerHTML='<div class=\'avatar-placeholder\'>👨‍🏫</div>'">
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <section id="about">
+        <h2 class="section-title animate-on-scroll"><span>📖</span> Обо мне</h2>
+        <div class="grid-2 animate-on-scroll">
+            <div class="card"><div class="card-icon">🎯</div><h3>Мой подход</h3><p>Я считаю, что главное — научить думать, а не заучивать формулы. На занятиях мы разбираем темы до полного понимания, решаем задачи разного уровня сложности и закрепляем материал на практике.</p></div>
+            <div class="card"><div class="card-icon">💡</div><h3>Почему я?</h3><p>Сам сдал ЕГЭ на высокие баллы (математика — 94, физика — 92, русский — 91), а ОГЭ — на отлично. Хорошо понимаю, с какими трудностями сталкиваются школьники, и знаю, как объяснить сложные вещи простым языком.</p></div>
+        </div>
+    </section>
+
+    <section>
+        <h2 class="section-title animate-on-scroll"><span>🎓</span> Образование и достижения</h2>
+        <div class="grid-3 animate-on-scroll">
+            <div class="card"><div class="card-icon">🏫</div><h3>Школа</h3><p>Промышленно-коммерческий лицей, физико-математический класс</p></div>
+            <div class="card"><div class="card-icon">🎓</div><h3>МГТУ им. Баумана</h3><p>Факультет «Энергомашиностроение», бюджетная форма обучения</p></div>
+            <div class="card"><div class="card-icon">📈</div><h3>Результаты ЕГЭ</h3><p>Математика — 94 | Физика — 92 | Русский язык — 91<br>Средний балл: 92.3</p></div>
+            <div class="card"><div class="card-icon">⭐</div><h3>Результаты ОГЭ</h3><p>Математика — 5 | Физика — 5 (отлично)</p></div>
+            <div class="card"><div class="card-icon">💻</div><h3>Сертификаты</h3><p>Оператор ЭВМ (профессиональная подготовка)</p></div>
+            <div class="card"><div class="card-icon">👨‍🏫</div><h3>Опыт</h3><p>Куратор в крупной онлайн-школе, помощь ученикам</p></div>
+            <div class="card"><div class="card-icon">🏆</div><h3>Достижения</h3><p>Призёр городских олимпиад по математике и физике</p></div>
+        </div>
+    </section>
+
+    <section id="subjects">
+        <h2 class="section-title animate-on-scroll"><span>📚</span> Какие предметы преподаю</h2>
+        <div class="grid-2 animate-on-scroll">
+            <div class="subject-card"><div class="subject-icon">📐</div><h3>Математика</h3><ul><li>5–9 классы (алгебра, геометрия)</li><li>Подготовка к ОГЭ</li><li>10 класс — основы ЕГЭ</li><li>Повышение успеваемости</li></ul></div>
+            <div class="subject-card"><div class="subject-icon">⚡</div><h3>Физика</h3><ul><li>7–9 классы</li><li>Подготовка к ОГЭ</li><li>Разбор сложных тем</li><li>Решение задач повышенной сложности</li></ul></div>
+        </div>
+    </section>
+
+    <section>
+        <h2 class="section-title animate-on-scroll"><span>🚀</span> Как проходят занятия</h2>
+        <div class="grid-4 animate-on-scroll">
+            <div class="card" style="text-align: center;"><div class="card-icon" style="background: linear-gradient(135deg, #667eea, #764ba2); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: white;">1</div><h3>Знакомство</h3><p>Первое занятие — бесплатно (30 мин). Определяем уровень, ставим цели.</p></div>
+            <div class="card" style="text-align: center;"><div class="card-icon" style="background: linear-gradient(135deg, #667eea, #764ba2); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: white;">2</div><h3>Диагностика</h3><p>Выявляю пробелы, составляю индивидуальный план.</p></div>
+            <div class="card" style="text-align: center;"><div class="card-icon" style="background: linear-gradient(135deg, #667eea, #764ba2); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: white;">3</div><h3>Регулярные занятия</h3><p>Разбираем темы, решаем задачи. 60 минут.</p></div>
+            <div class="card" style="text-align: center;"><div class="card-icon" style="background: linear-gradient(135deg, #667eea, #764ba2); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: white;">4</div><h3>Результат</h3><p>Уверенные знания, успешная сдача экзаменов.</p></div>
+        </div>
+        <div class="animate-on-scroll" style="background: linear-gradient(135deg, #e8f0fe, #f0e8fe); padding: 20px; border-radius: 20px; text-align: center; margin-top: 20px;">
+            <i class="fas fa-video" style="color: #667eea; margin-right: 10px;"></i>
+            Все занятия проходят онлайн через <strong>Яндекс Телемост</strong> — ничего устанавливать не нужно
+        </div>
+    </section>
+
+    <section>
+        <h2 class="section-title animate-on-scroll"><span>💰</span> Стоимость занятий</h2>
+        <div class="animate-on-scroll">
+            <div class="price-table">
+                <div class="price-row"><span class="price-name">5–6 класс (60 минут)</span><span class="price-value">850 ₽</span></div>
+                <div class="price-row"><span class="price-name">7–8 класс (60 минут)</span><span class="price-value">900 ₽</span></div>
+                <div class="price-row"><span class="price-name">9 класс / Подготовка к ОГЭ (60 минут)</span><span class="price-value">1000 ₽</span></div>
+                <div class="price-row"><span class="price-name">10 класс / Подготовка к ЕГЭ (60 минут)</span><span class="price-value">1000 ₽</span></div>
+            </div>
+            <p class="price-note">💳 Оплата после каждого занятия переводом на карту (Сбер, Т-Банк, ВТБ)</p>
+            <p class="price-note">🎁 Приведи друга — скидка 20% на следующий урок для вас обоих</p>
+        </div>
+    </section>
+
+    <section>
+        <h2 class="section-title animate-on-scroll"><span>⭐</span> Отзывы учеников</h2>
+        <div class="reviews-slider animate-on-scroll">
+            <div class="reviews-container" id="reviewsContainer">
+                <div class="review-card"><div class="review-author"><div class="review-avatar">А</div><div class="review-info"><h4>Анна К.</h4><div class="stars">★★★★★</div></div></div><div class="review-text">«Максим — лучший репетитор! За два месяца подтянули алгебру с тройки на твёрдую пятёрку. Объясняет очень понятно, всегда на связи.»</div><span class="review-result">📈 С 3 на 5 за 2 месяца</span></div>
+                <div class="review-card"><div class="review-author"><div class="review-avatar">Д</div><div class="review-info"><h4>Даниил М.</h4><div class="stars">★★★★★</div></div></div><div class="review-text">«Готовились к ОГЭ по физике почти с нуля. Итог — 36 баллов из 40! Очень рекомендую Максима как репетитора.»</div><span class="review-result">🚀 ОГЭ на 5 (36/40 баллов)</span></div>
+                <div class="review-card"><div class="review-author"><div class="review-avatar">С</div><div class="review-info"><h4>София П.</h4><div class="stars">★★★★★</div></div></div><div class="review-text">«Дочка боялась математики, а теперь сама просит дополнительные задачи! Спасибо огромное за терпение и подход!»</div><span class="review-result">💪 Полюбила математику</span></div>
+            </div>
+            <div class="slider-dots" id="sliderDots"></div>
+        </div>
+    </section>
+
+    <section id="materials">
+        <h2 class="section-title animate-on-scroll"><span>📚</span> Полезные материалы</h2>
+        <div class="animate-on-scroll">
+            <a href="algebra.pdf" class="material-link" download><span class="material-icon">📐</span><div class="material-info"><strong>Шпаргалка по алгебре</strong><small>Формулы 7–9 класс (PDF, 497 КБ)</small></div><i class="fas fa-download" style="margin-left: auto; color: #a0aec0;"></i></a>
+            <a href="fizika.pdf" class="material-link" download><span class="material-icon">⚡</span><div class="material-info"><strong>Формулы по физике</strong><small>Механика и электричество (PDF, 2.3 МБ)</small></div><i class="fas fa-download" style="margin-left: auto; color: #a0aec0;"></i></a>
+            <a href="oge.pdf" class="material-link" download><span class="material-icon">📝</span><div class="material-info"><strong>Демоверсия ОГЭ</strong><small>Официальные демоварианты с ответами (PDF, 567 КБ)</small></div><i class="fas fa-download" style="margin-left: auto; color: #a0aec0;"></i></a>
+        </div>
+    </section>
+
+    <section>
+        <h2 class="section-title animate-on-scroll"><span>❓</span> Часто задаваемые вопросы</h2>
+        <div class="animate-on-scroll">
+            <div class="faq-item"><div class="faq-question">Как проходят занятия? <i class="fas fa-chevron-down"></i></div><div class="faq-answer">Занятия проходят онлайн через Яндекс Телемост. Я использую виртуальную доску, где пишу и рисую схемы. Ученик всё видит в реальном времени.</div></div>
+            <div class="faq-item"><div class="faq-question">Сколько длится занятие? <i class="fas fa-chevron-down"></i></div><div class="faq-answer">Стандартное занятие длится 60 минут. При необходимости можем увеличить до 90 минут.</div></div>
+            <div class="faq-item"><div class="faq-question">Есть ли пробное занятие? <i class="fas fa-chevron-down"></i></div><div class="faq-answer">Да, первое занятие — ознакомительное и бесплатное (30 минут).</div></div>
+            <div class="faq-item"><div class="faq-question">Как оплачивать занятия? <i class="fas fa-chevron-down"></i></div><div class="faq-answer">Оплата после каждого занятия переводом на карту любого банка.</div></div>
+            <div class="faq-item"><div class="faq-question">Что если нужно отменить занятие? <i class="fas fa-chevron-down"></i></div><div class="faq-answer">Предупредите меня минимум за 3 часа — и мы перенесём занятие на другое удобное время.</div></div>
+        </div>
+    </section>
+
+    <section id="contacts">
+        <h2 class="section-title animate-on-scroll"><span>📞</span> Свяжитесь со мной</h2>
+        <div class="contact-grid animate-on-scroll">
+            <a href="https://t.me/kovalev_math" target="_blank" class="contact-card"><div class="contact-icon"><i class="fab fa-telegram-plane"></i></div><div class="contact-info"><h4>Telegram</h4><p>@kovalev_math</p></div><button class="copy-contact" data-copy="@kovalev_math" style="margin-left: auto; background: none; border: none; color: #a0aec0; cursor: pointer;"><i class="far fa-copy"></i></button></a>
+            <a href="https://vk.com/kovalev_math" target="_blank" class="contact-card"><div class="contact-icon"><i class="fab fa-vk"></i></div><div class="contact-info"><h4>ВКонтакте</h4><p>vk.com/kovalev_math</p></div><button class="copy-contact" data-copy="vk.com/kovalev_math" style="margin-left: auto; background: none; border: none; color: #a0aec0; cursor: pointer;"><i class="far fa-copy"></i></button></a>
+            <div class="contact-card" style="cursor: pointer;"><div class="contact-icon"><i class="fas fa-phone-alt"></i></div><div class="contact-info"><h4>Телефон</h4><p>+7 900 480 26 12</p></div><button class="copy-contact" data-copy="+79004802612" style="margin-left: auto; background: none; border: none; color: #a0aec0; cursor: pointer;"><i class="far fa-copy"></i></button></div>
+        </div>
+    </section>
+
+    <section>
+        <div class="form-card animate-on-scroll">
+            <h3 style="text-align: center; margin-bottom: 24px; font-size: 1.5rem;">✉️ Напишите мне</h3>
+            <form id="contactForm" action="https://formspree.io/f/xojydkol" method="POST">
+                <div class="form-group"><input type="text" name="name" placeholder="Ваше имя" required></div>
+                <div class="form-group"><input type="tel" id="phoneInput" name="phone" placeholder="+7 (900) 123-45-67" required></div>
+                <div class="form-group"><textarea name="message" rows="4" placeholder="Расскажите о себе: класс, предмет, цели, удобное время..."></textarea></div>
+                <button type="submit" class="btn btn-gradient btn-block" style="width: 100%;">📤 Отправить сообщение</button>
+                <div class="form-message" id="formMessage" style="display: none;"></div>
+            </form>
+        </div>
+    </section>
+</div>
+
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#about">Обо мне</a>
+                <a href="#subjects">Предметы</a>
+                <a href="#materials">Материалы</a>
+                <a href="#contacts">Контакты</a>
+                <a href="tasks.html">Сборник задач</a>
+                <a href="constructor.html">Конструктор вариантов</a>
+                <a href="profile.html">Профиль</a>
+                <a href="admin.html" style="background: #e53e3e; padding: 6px 16px; border-radius: 30px;">🔧 Админ</a>
+            </div>
+            <p>© 2026 Максим Ковалёв · Репетитор по математике и физике</p>
+            <p><a onclick="addToFavorites()" style="color: white; cursor: pointer; opacity: 0.7;">⭐ Добавить сайт в закладки</a></p>
+        </div>
+    </div>
+</footer>
+
+<div class="modal" id="successModal">
+    <div class="modal-content"><span class="modal-close" style="float: right; cursor: pointer; font-size: 24px;">&times;</span><div class="modal-icon">✅</div><h3>Сообщение отправлено!</h3><p>Я свяжусь с вами в ближайшее время.</p><button class="btn btn-primary modal-close-btn" style="margin-top: 20px;">Закрыть</button></div>
+</div>
+
+<script>
+    (function() {
+        const animatedElements = document.querySelectorAll('.animate-on-scroll');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+        }, { threshold: 0.1 });
+        animatedElements.forEach(el => observer.observe(el));
+
+        document.querySelectorAll('.copy-contact').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const text = btn.dataset.copy;
+                try {
+                    await navigator.clipboard.writeText(text);
+                    const icon = btn.querySelector('i');
+                    const originalClass = icon.className;
+                    icon.className = 'fas fa-check';
+                    setTimeout(() => { icon.className = originalClass; }, 1500);
+                } catch(e) {}
+            });
+        });
+
+        const phoneInput = document.getElementById('phoneInput');
+        if (phoneInput) {
+            phoneInput.addEventListener('input', function(e) {
+                let val = this.value.replace(/\D/g, '');
+                if (val.length > 11) val = val.slice(0, 11);
+                let formatted = '';
+                if (val.length > 0) formatted = '+' + val;
+                if (val.length > 1) formatted = '+' + val.slice(0,1) + ' (' + val.slice(1,4);
+                if (val.length > 4) formatted = '+' + val.slice(0,1) + ' (' + val.slice(1,4) + ') ' + val.slice(4,7);
+                if (val.length > 7) formatted = '+' + val.slice(0,1) + ' (' + val.slice(1,4) + ') ' + val.slice(4,7) + '-' + val.slice(7,9);
+                if (val.length > 9) formatted = '+' + val.slice(0,1) + ' (' + val.slice(1,4) + ') ' + val.slice(4,7) + '-' + val.slice(7,9) + '-' + val.slice(9,11);
+                this.value = formatted;
+            });
+        }
+
+        const form = document.getElementById('contactForm');
+        const modal = document.getElementById('successModal');
+        const formMessage = document.getElementById('formMessage');
+
+        if (form) {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = form.querySelector('button');
+                btn.disabled = true;
+                btn.textContent = 'Отправка...';
+                try {
+                    const formData = new FormData(form);
+                    const response = await fetch(form.action, { method: 'POST', body: formData, headers: { 'Accept': 'application/json' } });
+                    if (response.ok) {
+                        form.reset();
+                        modal.classList.add('show');
+                        setTimeout(() => modal.classList.remove('show'), 4000);
+                    } else throw new Error();
+                } catch(e) {
+                    formMessage.style.display = 'block';
+                    formMessage.style.background = '#fee';
+                    formMessage.style.color = '#c00';
+                    formMessage.style.padding = '12px';
+                    formMessage.style.borderRadius = '12px';
+                    formMessage.style.marginTop = '16px';
+                    formMessage.textContent = '❌ Ошибка отправки. Попробуйте позже.';
+                    setTimeout(() => { formMessage.style.display = 'none'; }, 3000);
+                } finally {
+                    btn.disabled = false;
+                    btn.textContent = '📤 Отправить сообщение';
+                }
+            });
+        }
+
+        document.querySelectorAll('.modal-close, .modal-close-btn').forEach(el => {
+            el.addEventListener('click', () => modal.classList.remove('show'));
+        });
+        modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('show'); });
+
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.querySelector('.faq-question').addEventListener('click', () => {
+                item.classList.toggle('active');
+            });
+        });
+
+        const reviewsContainer = document.getElementById('reviewsContainer');
+        const sliderDots = document.getElementById('sliderDots');
+        if (reviewsContainer && sliderDots) {
+            const reviewCards = reviewsContainer.children;
+            const totalCards = reviewCards.length;
+            let currentIndex = 0;
+            for (let i = 0; i < totalCards; i++) {
+                const dot = document.createElement('div');
+                dot.classList.add('slider-dot');
+                if (i === 0) dot.classList.add('active');
+                dot.addEventListener('click', () => goToSlide(i));
+                sliderDots.appendChild(dot);
+            }
+            const dots = document.querySelectorAll('.slider-dot');
+            function updateCarousel() { reviewsContainer.style.transform = `translateX(-${currentIndex * 100}%)`; dots.forEach((dot, i) => dot.classList.toggle('active', i === currentIndex)); }
+            function goToSlide(index) { currentIndex = index; updateCarousel(); }
+            setInterval(() => { currentIndex = (currentIndex + 1) % totalCards; updateCarousel(); }, 5000);
+        }
+
+        document.getElementById('contactBtnNav')?.addEventListener('click', () => {
+            document.getElementById('contacts').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        window.addToFavorites = function() {
+            try {
+                if (window.external && 'AddFavorite' in window.external) window.external.AddFavorite(window.location.href, document.title);
+                else alert('Нажмите Ctrl+D (или Cmd+D на Mac), чтобы добавить сайт в закладки.');
+            } catch(e) { alert('Нажмите Ctrl+D (или Cmd+D на Mac)'); }
+        };
+
+        // ========== АВТОРИЗАЦИЯ В НАВИГАЦИИ ==========
+        const CURRENT_USER_KEY = "current_user";
+        const navLinks = document.getElementById('navLinks');
+        
+        function updateNavBar() {
+            const currentUser = localStorage.getItem(CURRENT_USER_KEY);
+            
+            // Удаляем старые динамические элементы
+            const oldProfileLink = document.querySelector('.profile-link-nav');
+            const oldLogoutBtn = document.querySelector('.logout-nav-btn');
+            const oldAdminLink = document.querySelector('.admin-link-nav');
+            const oldLoginLink = document.querySelector('.login-link');
+            if (oldProfileLink) oldProfileLink.remove();
+            if (oldLogoutBtn) oldLogoutBtn.remove();
+            if (oldAdminLink) oldAdminLink.remove();
+            if (oldLoginLink) oldLoginLink.remove();
+            
+            if (currentUser) {
+                const user = JSON.parse(currentUser);
+                
+                // Ссылка на профиль
+                const profileLink = document.createElement('a');
+                profileLink.href = 'profile.html';
+                profileLink.className = 'profile-link-nav';
+                profileLink.style.cssText = 'background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 8px 20px; border-radius: 30px;';
+                profileLink.innerHTML = '<i class="fas fa-user"></i> ' + (user.name || user.username);
+                navLinks.appendChild(profileLink);
+                
+                // Если админ — ссылка на админку
+                if (user.role === 'admin') {
+                    const adminLink = document.createElement('a');
+                    adminLink.href = 'admin.html';
+                    adminLink.className = 'admin-link-nav';
+                    adminLink.style.cssText = 'background: #e53e3e; color: white; padding: 8px 20px; border-radius: 30px; text-decoration: none;';
+                    adminLink.innerHTML = '<i class="fas fa-crown"></i> Админ-панель';
+                    navLinks.appendChild(adminLink);
+                }
+                
+                // Кнопка выхода
+                const logoutBtn = document.createElement('button');
+                logoutBtn.className = 'logout-nav-btn';
+                logoutBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i> Выйти';
+                logoutBtn.onclick = () => {
+                    localStorage.removeItem(CURRENT_USER_KEY);
+                    window.location.reload();
+                };
+                navLinks.appendChild(logoutBtn);
+            } else {
+                // Ссылка на вход
+                const loginLink = document.createElement('a');
+                loginLink.href = 'login.html';
+                loginLink.className = 'login-link';
+                loginLink.style.cssText = 'background: transparent; border: 1px solid #667eea; color: #667eea; padding: 8px 20px; border-radius: 30px; text-decoration: none;';
+                loginLink.innerHTML = '<i class="fas fa-sign-in-alt"></i> Войти';
+                navLinks.appendChild(loginLink);
+            }
+        }
+        
+        updateNavBar();
+    })();
+</script>
+</body>
+</html>
